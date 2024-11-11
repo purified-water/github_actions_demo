@@ -1,0 +1,33 @@
+name: Deploy to Vercel # Workflow name
+
+on:
+  push:
+    branches:
+      - main # Trigger the workflow on pushes to the main branch
+  pull_request:
+    branches:
+      - main # Optional: run workflow for pull requests to main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest # Use the latest Ubuntu environment for the job
+
+    steps:
+      - name: Check out code # Step 1: Check out the latest code from the repository
+        uses: actions/checkout@v2
+
+      - name: Install dependencies # Step 2: Install required project dependencies
+        run: npm install
+
+      - name: Build project # Step 3: Build the project for deployment
+        run: npm run build
+
+      - name: Run tests # Step 4: Run automated tests to ensure code quality
+        run: npm test
+
+      - name: Deploy to Vercel # Step 5: Deploy the app to Vercel in production mode
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }} # Organization ID for Vercel
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }} # Project ID for Vercel
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }} # Token for Vercel authentication
+        run: npx vercel --prod --token $VERCEL_TOKEN # Deploy using Vercel CLI with the production flag
