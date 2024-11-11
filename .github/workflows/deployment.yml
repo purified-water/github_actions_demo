@@ -23,7 +23,7 @@ jobs:
         run: npm run build
 
       - name: Run tests # Step 4: Run automated tests to ensure code quality
-        run: npm test
+        run: npm run test -- --watchAll
 
       - name: Deploy to Vercel # Step 5: Deploy the app to Vercel in production mode
         env:

@@ -30,11 +30,10 @@ const GalleryGrid = () => {
             setLoading(false);
         };
 
-        // Only continue fetching photos if more are available
-        if (hasMore) {
+        if (hasMore && !loading) {
             fetchPhotos();
         }
-    }, [page, hasMore]);
+    }, [page, hasMore, loading]);
 
     const loadMore = () => {
         setPage((prev) => prev + 1);
@@ -51,13 +50,14 @@ const GalleryGrid = () => {
             { threshold: 0.8 } // Adjust threshold as needed (1.0 means fully in view)
         );
 
-        if (observerRef.current) {
-            observer.observe(observerRef.current);
+        const currentObserverRef = observerRef.current;
+        if (currentObserverRef) {
+            observer.observe(currentObserverRef);
         }
 
         return () => {
-            if (observerRef.current) {
-                observer.unobserve(observerRef.current);
+            if (currentObserverRef) {
+                observer.unobserve(currentObserverRef);
             }
         };
     }, [loading, hasMore]);
